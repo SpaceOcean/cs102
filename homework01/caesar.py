@@ -12,7 +12,7 @@ def encrypt_caesar(plaintext):
     ciphertext = ""
 
     for i in range (len(plaintext)):
-        elif ('x' <= plaintext[i] <= 'z') or ('X' <= plaintext[i] <= 'Z'): 
+        if ('x' <= plaintext[i] <= 'z') or ('X' <= plaintext[i] <= 'Z'): 
             ciphertext += chr(ord(plaintext[i])-23)
         elif ('э' <= plaintext[i] <= 'я') or ('Э' <= plaintext[i] <= 'Я'):
             ciphertext += chr(ord(plaintext[i])-29)
@@ -22,7 +22,7 @@ def encrypt_caesar(plaintext):
             ciphertext += chr(ord(plaintext[i])+3)  
         else:
             ciphertext += plaintext[i] 
-            
+
     return ciphertext
 
 def decrypt_caesar(ciphertext):
