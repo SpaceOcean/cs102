@@ -12,17 +12,16 @@ def is_prime(n):
     >>> is_prime(8)
     False
     """
-    boool = 0
+    dividers = 0
     for i in range (1,n+1):
         if n%i == 0:
-            boool +=1
-    if boool == 2:
+            dividers +=1
+    if dividers == 2:
         return True
     elif n == 1:
-            return True    
+        return True    
     else:
         return False
-    pass
 
 def gcd(a, b):
     """
@@ -33,19 +32,16 @@ def gcd(a, b):
     >>> gcd(3, 7)
     1
     """
-    if a > b:
-        for i in range (1,b+1):
-            if b%i == 0:
-                if a%i ==0:
-                    max = i
-    elif a < b:
-        for i in range (1,a+1):
-            if a%i == 0:
-                if b%i ==0:
-                    max = i
-    else:
-        max = a
-    return max
+    if a < b:
+        a, b = b, a
+    for i in range (1,b+1):
+        if b%i == 0:
+            if a%i ==0:
+                max_divider = i
+    if a == b:
+        max_divider = a
+
+    return max_divider
 
 
 def multiplicative_inverse(e, phi):
@@ -56,12 +52,12 @@ def multiplicative_inverse(e, phi):
     >>> multiplicative_inverse(7, 40)
     23
     """
-    flag = 0
+    flag = False
     x = 1
-    while flag == 0:
+    while flag:
         if (x*phi+1)%e == 0:
             d = (x*phi+1)//e
-            flag = 1
+            flag = True
             return d
         x += 1
 
