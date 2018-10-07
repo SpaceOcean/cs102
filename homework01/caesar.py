@@ -11,17 +11,13 @@ def encrypt_caesar(plaintext):
     """
     ciphertext = ""
 
-    for i in range (len(plaintext)):
-        if ('x' <= plaintext[i] <= 'z') or ('X' <= plaintext[i] <= 'Z'): 
-            ciphertext += chr(ord(plaintext[i])-23)
-        elif ('э' <= plaintext[i] <= 'я') or ('Э' <= plaintext[i] <= 'Я'):
-            ciphertext += chr(ord(plaintext[i])-29)
-        elif (('A' >= plaintext[i] < 'X') or ('a' >= plaintext[i] < 'x')):
-            ciphertext += chr(ord(plaintext[i])+3)
-        elif ('А' >= plaintext[i] < 'Э') or ('а' >= plaintext[i] < 'э'):
-            ciphertext += chr(ord(plaintext[i])+3)  
+    for i in range(len(plaintext)):
+        if (('X' <= plaintext[i] <= 'Z') or ('x' <= plaintext[i] <= 'z')):
+            ciphertext += chr(ord(plaintext[i]) - 23)
+        elif '!' <= plaintext[i] <= '@':
+            ciphertext += plaintext[i]
         else:
-            ciphertext += plaintext[i] 
+            ciphertext += chr(ord(plaintext[i]) + 3)
 
     return ciphertext
 
@@ -38,22 +34,17 @@ def decrypt_caesar(ciphertext):
     """
     plaintext = ""
 
-    for i in range (len(ciphertext)):
-        if ('A' <= ciphertext[i] <= 'C') or ('a' <= ciphertext[i] <= 'c'): 
-            plaintext += chr(ord(ciphertext[i])+23)
-        elif ('А' <= ciphertext[i] <= 'В') or ('а' <= ciphertext[i] <= 'в'):
-            plaintext += chr(ord(ciphertext[i])+29)
-        elif ('C' > ciphertext[i] <='Z') or ('c' > ciphertext[i] <='z'):
-            plaintext += chr(ord(ciphertext[i])-3)
-        elif ('В' > ciphertext[i] <='Я') or ('в' > ciphertext[i] <='я'):
-            plaintext += chr(ord(ciphertext[i])-3)
-        else:
+    for i in range(len(ciphertext)):
+        if ('A' <= ciphertext[i] <= 'C') or ('a' <= ciphertext[i] <= 'c'):
+            plaintext += chr(ord(ciphertext[i]) + 23)
+        elif '!' <= ciphertext[i] <= '@':
             plaintext += ciphertext[i]
+        else:
+            plaintext += chr(ord(ciphertext[i]) - 3)
 
     return plaintext
 
 if __name__ == "__main__":
-    ciphertext = encrypt_caesar(input ("Введите строку, которую следует закодировать: "))
-    print(ciphertext)
-    plaintext = decrypt_caesar(ciphertext)
-    print(plaintext)
+    entered_plaintext = input("Введите строку, которую следует закодировать: ")
+    print(encrypt_caesar(entered_plaintext))
+    print(decrypt_caesar(encrypt_caesar(entered_plaintext)))

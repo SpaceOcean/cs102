@@ -13,9 +13,9 @@ def is_prime(n):
     False
     """
     dividers = 0
-    for i in range (1,n+1):
-        if n%i == 0:
-            dividers +=1
+    for i in range(1, n + 1):
+        if n % i == 0:
+            dividers += 1
     if dividers == 2:
         return True
     elif n == 1:
@@ -34,13 +34,13 @@ def gcd(a, b):
     """
     if a < b:
         a, b = b, a
-    for i in range (1,b+1):
-        if b%i == 0:
-            if a%i ==0:
+    for i in range(1, b + 1):
+        if b % i == 0:
+            if a % i == 0:
                 max_divider = i
     if a == b:
         max_divider = a
-
+        
     return max_divider
 
 
@@ -52,12 +52,13 @@ def multiplicative_inverse(e, phi):
     >>> multiplicative_inverse(7, 40)
     23
     """
-    flag = False
+
+    flag = 0
     x = 1
-    while flag:
-        if (x*phi+1)%e == 0:
-            d = (x*phi+1)//e
-            flag = True
+    while flag == 0:
+        if (x * phi + 1) % e == 0:
+            d = (x * phi + 1) // e
+            flag = 1
             return d
         x += 1
 
@@ -72,7 +73,7 @@ def generate_keypair(p, q):
     n = p * q
 
     # phi = (p-1)(q-1)
-    phi = (p-1) * (q-1)
+    phi = (p - 1) * (q - 1)
 
     # Choose an integer e such that e and phi(n) are coprime
     e = random.randrange(1, phi)

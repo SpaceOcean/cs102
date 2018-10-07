@@ -12,36 +12,21 @@ def encrypt_vigenere(plaintext, keyword):
 
     ciphertext = ""
 
-    for i in range (len(plaintext)):
-
-        if (64<ord(keyword[i])<91):   # ключ - заглавная латинская
-            ciphertext += chr(ord(plaintext[i]) + ord(keyword[i])-65)
-        elif (96<ord(keyword[i])<123):   # ключ - строчная латинская
-            ciphertext += chr(ord(plaintext[i]) + ord(keyword[i])-97)
-        elif (1039<ord(keyword[i])<1072):   # ключ - заглавная русская
-            ciphertext += chr(ord(plaintext[i]) + ord(keyword[i])-1040)
-        elif (1071<ord(keyword[i])<1104):   # ключ - строчная русская
-            ciphertext += chr(ord(plaintext[i]) + ord(keyword[i])-1072)
-
+    for i in range(len(plaintext)):
+        if 'A' <= keyword[i] <= 'Z':
+            ciphertext += chr(ord(plaintext[i]) + ord(keyword[i]) - 65)
+        elif 'a' <= keyword[i] <= 'z':
+            ciphertext += chr(ord(plaintext[i]) + ord(keyword[i]) - 97)
 # проверяем не вышел ли закодированный символ за пределы алфавита
-        id_symbol = ord(ciphertext[i])
-        if (64 < id_symbol < 91) and not (64 < id_symbol <91): # для заглавных латинских
-            ciphertextBUFER = ciphertext[i]
+        if ('A' <= plaintext[i] <= 'Z' and ciphertext[i] > 'Z'):
+            ciphertext_bufer = ciphertext[i]
             ciphertext = ciphertext[:-1]
-            ciphertext += chr(ord(ciphertextBUFER)-26)
-        elif (96 < id_symbol < 123) and not (96 < id_symbol <123): # для строчных латинских
-            ciphertextBUFER = ciphertext[i]
+            ciphertext += chr(ord(ciphertext_bufer) - 26)
+        elif ('a' <= plaintext[i] <= 'z' and ciphertext[i] > 'z'):
+            ciphertext_bufer = ciphertext[i]
             ciphertext = ciphertext[:-1]
-            ciphertext += chr(ord(ciphertextBUFER)-26)
-        elif (1039 < id_symbol < 1072) and not (1039 < id_symbol <1072): # для заглавных русских
-            ciphertextBUFER = ciphertext[i]
-            ciphertext = ciphertext[:-1]
-            ciphertext += chr(ord(ciphertextBUFER)-32)
-        elif (1071 < id_symbol < 1104) and not (1071 < id_symbol <1104): # для строчных русских
-            ciphertextBUFER = ciphertext[i]
-            ciphertext = ciphertext[:-1]
-            ciphertext += chr(ord(ciphertextBUFER)-32)
-        else: # для символов
+            ciphertext += chr(ord(ciphertext_bufer) - 26)
+        elif '!' <= plaintext[i] <= '@': # для символов
             ciphertext = ciphertext[:-1]
             ciphertext += plaintext[i]
 
@@ -60,48 +45,28 @@ def decrypt_vigenere(ciphertext, keyword):
         keyword *= 2
     plaintext = ""
 
-    for i in range (len(ciphertext)):
-
-        if (ord(keyword[i])>64 and ord(keyword[i])<91):   # ключ - заглавная латинская
-            plaintext += chr(ord(ciphertext[i]) - ord(keyword[i])+65)
-        elif (96<ord(keyword[i])<123):   # ключ - строчная латинская
-            plaintext += chr(ord(ciphertext[i]) - ord(keyword[i])+97)
-        elif (1039<ord(keyword[i])<1072):   # ключ - заглавная русская
-            plaintext += chr(ord(ciphertext[i]) - ord(keyword[i])+1040)
-        elif (1071<ord(keyword[i])<1104):   # ключ - строчная русская
-            plaintext += chr(ord(ciphertext[i]) - ord(keyword[i])+1072)
-
-# проверяем не вышел ли декодированный символ за пределы алфавита
-        id_symbol = ord(ciphertext[i])
-
-        if (64 < id_symbol < 91) and not (64 < id_symbol <91): # для заглавных латинских
-            plaintextBUFER = plaintext[i]
+    for i in range(len(ciphertext)):
+        if 'A' <= keyword[i] <= 'Z':
+            plaintext += chr(ord(ciphertext[i]) - ord(keyword[i]) + 65)
+        elif 'a' <= keyword[i] <= 'z':
+            plaintext += chr(ord(ciphertext[i]) - ord(keyword[i]) + 97)
+# проверяем не вышел ли закодированный символ за пределы алфавита
+        if ('A' <= ciphertext[i] <= 'Z' and plaintext[i] < 'A'):
+            plaintext_bufer = plaintext[i]
             plaintext = plaintext[:-1]
-            plaintext += chr(ord(plaintextBUFER)+26)
-        elif (96 < id_symbol < 123) and not (96 < id_symbol <123): # для строчных латинских
-            plaintextBUFER = plaintext[i]
+            plaintext += chr(ord(plaintext_bufer) + 26)
+        elif ('a' <= ciphertext[i] <= 'z' and plaintext[i] < 'a'):
+            plaintext_bufer = plaintext[i]
             plaintext = plaintext[:-1]
-            plaintext += chr(ord(plaintextBUFER)+26)
-        elif (1039 < id_symbol < 1072) and not (1039 < id_symbol <1072): # для заглавных русских
-            plaintextBUFER = plaintext[i]
-            plaintext = plaintext[:-1]
-            plaintext += chr(ord(plaintextBUFER)+32)
-        elif (1071 < id_symbol < 1104) and not (1071 < id_symbol <1104): # для строчных русских
-            plaintextBUFER = plaintext[i]
-            plaintext = plaintext[:-1]
-            plaintext += chr(ord(plaintextBUFER)+32)
-        else: # для символов
+            plaintext += chr(ord(plaintext_bufer) + 26)
+        elif '!' <= ciphertext[i] <= '@': # для символов
             plaintext = plaintext[:-1]
             plaintext += ciphertext[i]
 
     return plaintext
 
 if __name__ == "__main__":
-    keyword = input ("Введите слово-ключ: ")
-    ciphertext = encrypt_vigenere(input("Введите строку, которую следует закодировать: "),keyword)
-    print(ciphertext)
-    plaintext = decrypt_vigenere(ciphertext,keyword)
-    print(plaintext)
-
-
-    
+    input_word = input("Введите строку, которую следует закодировать: ")
+    input_key = input("Введите слово-ключ: ")
+    print(encrypt_vigenere(input_word, input_key))
+    print(decrypt_vigenere(encrypt_vigenere(input_word, input_key), input_key))
