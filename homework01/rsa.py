@@ -23,6 +23,7 @@ def is_prime(n):
     else:
         return False
 
+
 def gcd(a, b):
     """
     Euclid's algorithm for determining the greatest common divisor.
@@ -52,15 +53,26 @@ def multiplicative_inverse(e, phi):
     >>> multiplicative_inverse(7, 40)
     23
     """
+    table_of_values = []
+    i = 0
+    if phi > e:
+        phi, e = e, phi
+    while e % phi != 0:
+        table_of_values.append([e, phi, e % phi, e // phi])
+        e, phi = phi, e % phi
+        i += 1
+    i = len(table_of_values)
+    x = 0
+    y = 1
+    while i > 0:
+        i -= 1
+        table_of_values[i].append(y)
+        y = x - y * (table_of_values[i][3])
+        table_of_values[i].append(y)
+        x = table_of_values[i][4]
+    d = table_of_values[0][-1] % table_of_values[0][0]
 
-    flag = 0
-    x = 1
-    while flag == 0:
-        if (x * phi + 1) % e == 0:
-            d = (x * phi + 1) // e
-            flag = 1
-            return d
-        x += 1
+    return d
 
 
 def generate_keypair(p, q):
