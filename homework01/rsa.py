@@ -19,7 +19,7 @@ def is_prime(n):
     if dividers == 2:
         return True
     elif n == 1:
-        return True    
+        return True
     else:
         return False
 
@@ -41,7 +41,7 @@ def gcd(a, b):
                 max_divider = i
     if a == b:
         max_divider = a
-        
+
     return max_divider
 
 

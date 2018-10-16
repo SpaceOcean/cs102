@@ -17,7 +17,7 @@ def encrypt_vigenere(plaintext, keyword):
             ciphertext += chr(ord(plaintext[i]) + ord(keyword[i]) - 65)
         elif 'a' <= keyword[i] <= 'z':
             ciphertext += chr(ord(plaintext[i]) + ord(keyword[i]) - 97)
-        """ 
+        """
         проверяем не вышел ли закодированный символ за пределы алфавита
         """
         if ('A' <= plaintext[i] <= 'Z' and ciphertext[i] > 'Z'):
@@ -28,11 +28,12 @@ def encrypt_vigenere(plaintext, keyword):
             ciphertext_bufer = ciphertext[i]
             ciphertext = ciphertext[:-1]
             ciphertext += chr(ord(ciphertext_bufer) - 26)
-        elif '!' <= plaintext[i] <= '@': # для символов
+        elif '!' <= plaintext[i] <= '@':  # для символов
             ciphertext = ciphertext[:-1]
             ciphertext += plaintext[i]
 
     return ciphertext
+
 
 def decrypt_vigenere(ciphertext, keyword):
     """
@@ -63,7 +64,7 @@ def decrypt_vigenere(ciphertext, keyword):
             plaintext_bufer = plaintext[i]
             plaintext = plaintext[:-1]
             plaintext += chr(ord(plaintext_bufer) + 26)
-        elif '!' <= ciphertext[i] <= '@': # для символов
+        elif '!' <= ciphertext[i] <= '@':  # для символов
             plaintext = plaintext[:-1]
             plaintext += ciphertext[i]
 
