@@ -150,6 +150,7 @@ def solve(grid):
     row, col = pos
     for i in values:
         grid[row][col] = i
+        solve(grid)
 
 
 def check_solution(solution):
@@ -163,6 +164,7 @@ def check_solution(solution):
                 return False
             if set(get_block(solution, (row, col))) != set('123456789'):
                 return False
+
     return True
 
 
