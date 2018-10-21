@@ -199,7 +199,9 @@ def generate_sudoku(N):
         row = random.randint(0, 8)
         col = random.randint(0, 8)
         if grid[row][col] == '.':
-            grid[row][col] = str(random.randint(1, 9))
+            possible_values = list(find_possible_values(grid, (row, col)))
+            random_value = random.randint(0,len(possible_values)-1)
+            grid[row][col] = possible_values[random_value]
             N -= 1
 
     return grid
