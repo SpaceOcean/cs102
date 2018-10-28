@@ -29,7 +29,7 @@ def group(values, n):
     >>> group([1,2,3,4,5,6,7,8,9], 3)
     [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
     """
-    values = [values[i:i+n] for i in range(0, len(values), n)]
+    values = [values[i:i + n] for i in range(0, len(values), n)]
 
     return values
 
@@ -61,7 +61,7 @@ def get_col(values, pos):
     """
     col = pos[1]
 
-    return [values[row][col] for row in range(0, len(values))]
+    return [values[row][col] for row in range(len(values))]
 
 
 def get_block(values, pos):
@@ -100,7 +100,7 @@ def find_empty_positions(grid):
         for col in row:
             if col == '.':
                 pos = i // 3, i % 3
-                return pos
+                return (pos)
             i += 1
 
     return None
@@ -121,6 +121,8 @@ def find_possible_values(grid, pos):
     values -= set(get_row(grid, pos))
     values -= set(get_col(grid, pos))
     values -= set(get_block(grid, pos))
+    if values == set():
+        return None
 
     return values
 
@@ -139,18 +141,16 @@ def solve(grid):
     [['5', '3', '4', '6', '7', '8', '9', '1', '2'], ['6', '7', '2', '1', '9', '5', '3', '4', '8'], ['1', '9', '8', '3', '4', '2', '5', '6', '7'], ['8', '5', '9', '7', '6', '1', '4', '2', '3'], ['4', '2', '6', '8', '5', '3', '7', '9', '1'], ['7', '1', '3', '9', '2', '4', '8', '5', '6'], ['9', '6', '1', '5', '3', '7', '2', '8', '4'], ['2', '8', '7', '4', '1', '9', '6', '3', '5'], ['3', '4', '5', '2', '8', '6', '1', '7', '9']]
     """
     pos = find_empty_positions(grid)
-    values = find_possible_values(grid, pos)
-    if pos is None:
-        if check_solution(grid):
-            return grid
-        else:
-            return None
-    if values == []:
-        return None
+    if not pos:
+        return grid
     row, col = pos
-    for i in values:
-        grid[row][col] = i
-        solve(grid)
+    for value in find_possible_values(grid, pos):
+        grid[row][col] = value
+        solution = solve(grid)
+        if solution:
+            return solution
+    grid[row][col] = '.'
+    return None
 
 
 def check_solution(solution):
