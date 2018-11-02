@@ -148,7 +148,7 @@ def solve(grid):
         if solution:
             return solution
     grid[row][col] = '.'
-    
+
     return None
 
 
@@ -199,7 +199,7 @@ def generate_sudoku(N):
         col = random.randint(0, 8)
         if grid[row][col] == '.':
             possible_values = list(find_possible_values(grid, (row, col)))
-            random_value = random.randint(0,len(possible_values)-1)
+            random_value = random.randint(0, len(possible_values)-1)
             grid[row][col] = possible_values[random_value]
             N -= 1
 
