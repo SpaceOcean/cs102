@@ -1,5 +1,4 @@
 import random
-from typing import Optional, Tuple
 
 
 def read_sudoku(filename: str) -> list:
