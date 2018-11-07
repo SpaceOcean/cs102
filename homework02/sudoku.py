@@ -1,7 +1,8 @@
 import random
+from typing import Optional, Tuple
 
 
-def read_sudoku(filename):
+def read_sudoku(filename: str) -> list:
     """ Прочитать Судоку из указанного файла """
     digits = [c for c in open(filename).read() if c in '123456789.']
     grid = group(digits, 9)
@@ -100,10 +101,10 @@ def find_empty_positions(grid: list) -> tuple:
             if grid[row][col] == '.':
                 return (row, col)
 
-    return None
+    return ()
 
 
-def find_possible_values(grid: list, pos: int) -> set:
+def find_possible_values(grid: list, pos: tuple) -> set:
     """ Вернуть множество возможных значения для указанной позиции
 
     >>> grid = read_sudoku('puzzle1.txt')
@@ -136,11 +137,11 @@ def solve(grid: list) -> list:
     [['5', '3', '4', '6', '7', '8', '9', '1', '2'], ['6', '7', '2', '1', '9', '5', '3', '4', '8'], ['1', '9', '8', '3', '4', '2', '5', '6', '7'], ['8', '5', '9', '7', '6', '1', '4', '2', '3'], ['4', '2', '6', '8', '5', '3', '7', '9', '1'], ['7', '1', '3', '9', '2', '4', '8', '5', '6'], ['9', '6', '1', '5', '3', '7', '2', '8', '4'], ['2', '8', '7', '4', '1', '9', '6', '3', '5'], ['3', '4', '5', '2', '8', '6', '1', '7', '9']]
     """
     pos = find_empty_positions(grid)
-    if pos is None:
+    if pos is ():
         return grid
     values = find_possible_values(grid, pos)
     if not values:
-        return None
+        return []
     row, col = pos
     for value in values:
         grid[row][col] = value
@@ -149,7 +150,7 @@ def solve(grid: list) -> list:
             return solution
     grid[row][col] = '.'
 
-    return None
+    return []
 
 
 def check_solution(solution: list) -> bool:
