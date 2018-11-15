@@ -22,7 +22,6 @@ class GameOfLife:
         # Скорость протекания игры
         self.speed = speed
 
-
     def draw_grid(self):
         """ Отрисовать сетку """
         for x in range(0, self.width, self.cell_size):
@@ -31,7 +30,6 @@ class GameOfLife:
         for y in range(0, self.height, self.cell_size):
             pygame.draw.line(self.screen, pygame.Color('black'),
                     (0, y), (self.width, y))
-
 
     def run(self):
         """ Запустить игру """
@@ -57,7 +55,6 @@ class GameOfLife:
             clock.tick(self.speed)
         pygame.quit()
 
-
     def cell_list(self, randomize=True):
         """ Создание списка клеток.
 
@@ -79,7 +76,6 @@ class GameOfLife:
 
         return self.clist
 
-
     def draw_cell_list(self, clist):
         """ Отображение списка клеток
 
@@ -87,14 +83,15 @@ class GameOfLife:
         """
         for row in range(self.cell_height):
             for col in range(self.cell_width):
-                x = row * self.cell_size + self.cell_size / 2
-                y = col * self.cell_size + self.cell_size / 2
-                edge = self.cell_size - self.cell_size / 2
+                x = row * self.cell_size + 1
+                y = col * self.cell_size + 1
+                edge = self.cell_size - 1
                 if clist[row][col]:
-                    pygame.draw.rect(self.screen, pygame.Color('green'), (x, y, edge, edge))
+                    pygame.draw.rect(self.screen, pygame.Color('green'),
+                        (x, y, edge, edge))
                 else:
-                    pygame.draw.rect(self.screen, pygame.Color('white'), (x, y, edge, edge))
-
+                    pygame.draw.rect(self.screen, pygame.Color('white'),
+                        (x, y, edge, edge))
 
     def get_neighbours(self, cell):
         """ Вернуть список соседей для указанной ячейки
@@ -114,7 +111,6 @@ class GameOfLife:
                 neighbours.append(self.clist[row][col])
 
         return neighbours
-
 
     def update_cell_list(self, cell_list):
         """ Выполнить один шаг игры.
