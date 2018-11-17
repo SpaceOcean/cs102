@@ -121,21 +121,26 @@ class GameOfLife:
         :param cell_list: Игровое поле, представленное в виде матрицы
         :return: Обновленное игровое поле
         """
-        self.new_clist = []
+        new_clist = []
         for row in range(len(cell_list)):
-            self.new_clist.append([])
+            new_clist.append([])
             for col in range(len(cell_list[row])):
                 neighbours = self.get_neighbours((row, col))
                 value = 0
                 for i in neighbours:
                     value += i
                 if cell_list[row][col] == 0 and value == 3:
-                    self.new_clist[row].append(1)
+                    new_clist[row].append(1)
                 elif cell_list[row][col] == 0 and value != 3:
-                    self.new_clist[row].append(0)
+                    new_clist[row].append(0)
                 elif cell_list[row][col] == 1 and (3 < value or value < 2):
-                    self.new_clist[row].append(0)
+                    new_clist[row].append(0)
                 elif cell_list[row][col] == 1 and (1 < value < 4):
-                    self.new_clist[row].append(1)
+                    new_clist[row].append(1)
+        self.clist = new_clist
 
-        return self.new_clist
+        return self.clist
+
+if __name__ == '__main__':
+    game = GameOfLife(500, 500, 20, 10)
+    game.run()

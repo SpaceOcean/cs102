@@ -40,7 +40,7 @@ class GameOfLife:
         self.screen.fill(pygame.Color('white'))
 
         # Создание списка клеток
-        self.clist = CellList(self.cell_height, self.cell_width, randomize=True)
+        clist = CellList(self.cell_height, self.cell_width, randomize=True)
 
         running = True
         while running:
@@ -51,20 +51,20 @@ class GameOfLife:
 
             # Отрисовка списка клеток
             # Выполнение одного шага игры (обновление состояния ячеек)
-            x = 0
-            y = 0
-            csize = self.cell_size
-            for cell in grid:
+            x = 1
+            y = 1
+            for cell in clist:
+                csize = self.cell_size - 1
                 if cell.is_alive():
                     pygame.draw.rect(self.screen, pygame.Color('green'),
                         [x, y, csize, csize])
                 else:
                     pygame.draw.rect(self.screen, pygame.Color('white'),
                         [x, y, csize, csize])
-                x += csize
+                x += csize + 1
                 if x >= self.width:
-                    x = 0
-                    y += csize
+                    x = 1
+                    y += csize + 1
             clist.update()
 
             pygame.display.flip()
@@ -170,3 +170,7 @@ class CellList:
         clist.grid = grid
 
         return clist
+
+if __name__ == '__main__':
+    game = GameOfLife(500, 500, 20, 10)
+    game.run()
