@@ -6,7 +6,7 @@ from copy import deepcopy
 
 class GameOfLife:
 
-    def __init__(self, width=640, height=480, cell_size=10, speed=10):
+    def __init__(self, width=640, height=480, cell_size=10, speed=10) -> None:
         self.width = width
         self.height = height
         self.cell_size = cell_size
@@ -23,7 +23,7 @@ class GameOfLife:
         # Скорость протекания игры
         self.speed = speed
 
-    def draw_grid(self):
+    def draw_grid(self) -> None:
         """ Отрисовать сетку """
         for x in range(0, self.width, self.cell_size):
             pygame.draw.line(self.screen, pygame.Color('black'),
@@ -32,7 +32,7 @@ class GameOfLife:
             pygame.draw.line(self.screen, pygame.Color('black'),
                     (0, y), (self.width, y))
 
-    def run(self):
+    def run(self) -> None:
         """ Запустить игру """
         pygame.init()
         clock = pygame.time.Clock()
@@ -40,7 +40,7 @@ class GameOfLife:
         self.screen.fill(pygame.Color('white'))
 
         # Создание списка клеток
-        clist = CellList(self.cell_height, self.cell_width, randomize=True)
+        self.clist = CellList(self.cell_height, self.cell_width, randomize=True)
 
         running = True
         while running:
@@ -54,7 +54,7 @@ class GameOfLife:
             x = 0
             y = 0
             csize = self.cell_size
-            for cell in clist:
+            for cell in grid:
                 if cell.is_alive():
                     pygame.draw.rect(self.screen, pygame.Color('green'),
                         [x, y, csize, csize])
@@ -74,29 +74,31 @@ class GameOfLife:
 
 class Cell:
 
-    def __init__(self, row, col, state=False):
+    def __init__(self, row: int, col: int, state=False) -> None:
         self.row = row
         self.col = col
         self.state = state
 
-    def is_alive(self):
+    def is_alive(self) -> None:
 
         return self.state
 
 
 class CellList:
 
-    def __init__(self, nrows, ncols, randomize=False):
+    def __init__(self, nrows: int, ncols: int, randomize=False) -> None:
         self.nrows = nrows
         self.ncols = ncols
+        self.grid = []
         for row in range(nrows):
+            self.grid.append([])
             for col in range(ncols):
                 if randomize:
-                    self.clist = Cell(row, col, random.randint(0, 1))
+                    self.grid[row].append(Cell(row, col, random.randint(0, 1)))
                 else:
-                    self.clist = Cell(row, col, 0)
+                    self.grid[row].append(Cell(row, col, 0))
 
-    def get_neighbours(self, cell):
+    def get_neighbours(self, cell: Cell) -> list:
         neighbours = []
         for neighbours_row in range(cell.row-1, cell.row+2):
             if neighbours_row < 0 or neighbours_row > self.nrows - 1:
@@ -106,24 +108,24 @@ class CellList:
                     continue
                 if neighbours_col < 0 or neighbours_col > self.ncols - 1:
                     continue
-                neighbours.append(self.clist[neighbours_row][neighbours_col])
+                neighbours.append(self.grid[neighbours_row][neighbours_col])
 
         return neighbours
 
-    def update(self):
-        new_clist = copy.deepcopy(self.clist)
+    def update(self) -> object:
+        new_clist = deepcopy(self.grid)
         for cell in self:
             neighbours = self.get_neighbours(cell)
             value = 0
             for i in neighbours:
                 value += i.is_alive()
-            if cell.is_alive():
+            if new_clist[cell.row][cell.col].is_alive():
                 if not (1 < value < 4):
                     new_clist[cell.row][cell.col].state = 0
             else:
                 if value == 3:
                     new_clist[cell.row][cell.col].state = 1
-        self.clist = new_clist
+        self.grid = new_clist
 
         return self
 
@@ -132,11 +134,11 @@ class CellList:
 
         return self
 
-    def __next__(self):
+    def __next__(self) -> Cell:
         if self.row == self.nrows:
             raise StopIteration
 
-        cell = self.clist[self.row][self.col]
+        cell = self.grid[self.row][self.col]
         self.col += 1
         if self.col == self.ncols:
             self.row += 1
@@ -144,7 +146,7 @@ class CellList:
 
         return cell
 
-    def __str__(self):
+    def __str__(self) -> str:
         str = ''
         for row in range(self.nrows):
             for col in range(self.cols):
@@ -157,12 +159,14 @@ class CellList:
         return str
 
     @classmethod
-    def from_file(cls, filename):
-        clist = []
+    def from_file(cls, filename: str) -> "CellList":
+        grid = []
         with open(filename) as file:
             for row, line in enumerate(file):
-                for col, state in enumerate(line):
-                    if state in "01":
-                        clist.append(Cell(row, col, int(state)))
+                grid.append([Cell(row, col, int(state))
+                    for col, state in enumerate(line)
+                    if state != '\n' and (int(state) == 0 or int(state) == 1)])
+        clist = cls(len(grid), len(grid[0]), randomize=False)
+        clist.grid = grid
 
         return clist
