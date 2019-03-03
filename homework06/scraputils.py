@@ -1,5 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
+import socket
 
 
 def extract_news(parser):
@@ -7,11 +8,17 @@ def extract_news(parser):
     news_list = []
     news_list_subtext = []
     news = {}
-    tbl_list_title = parser.table.findAll('a', attrs={"class": "storylink"})
+    try:
+        tbl_list_title = parser.table.findAll('a', attrs={"class": "storylink"})
+    except AttributeError:
+        return news_list
     for link in tbl_list_title:
         news = dict(title=link.get_text(), url=link.get('href'))
         news_list.append(news)
-    tbl_list_subtext = parser.table.findAll('td', attrs={"class": "subtext"})
+    try:
+        tbl_list_subtext = parser.table.findAll('td', attrs={"class": "subtext"})
+    except AttributeError:
+        return news_list
     for link in tbl_list_subtext:
         news = dict(author=link.find('a', attrs={"class": "hnuser"}).get_text(),
                 comments=link.findAll('a')[-1].get_text(),
@@ -32,10 +39,16 @@ def extract_news(parser):
 
 def extract_next_page(parser):
     """ Extract next page URL """
-    return parser.table.find('a', attrs={"class": "morelink"}).get('href')
+    try:
+        next_page = parser.table.find('a', attrs={"class": "morelink"}).get('href')
+    except AttributeError:
+        url_ip = "https://news.ycombinator.com/unban?ip=213.21.44.132"
+        response_ip = requests.get(url_ip)
+        next_page = parser.table.find('a', attrs={"class": "morelink"}).get('href')
+    return next_page
 
 
-def get_news(url, n_pages=1):
+def get_news(url='https://news.ycombinator.com/newest', n_pages=1):
     """ Collect news from a given web page """
     news = []
     while n_pages:
@@ -47,8 +60,6 @@ def get_news(url, n_pages=1):
         url = "https://news.ycombinator.com/" + next_page
         news.extend(news_list)
         n_pages -= 1
+        if next_page == "":
+            return news
     return news
-
-if __name__ == '__main__':
-    news_list = get_news("https://news.ycombinator.com/newest", n_pages=2)
-    print(news_list)
